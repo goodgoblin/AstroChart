@@ -105,6 +105,8 @@ export interface Settings {
     COLLISION_RADIUS: number;
     ASPECTS: Aspect;
     SHOW_DIGNITIES_TEXT: boolean;
+    SHOW_POINT_SIGN_GLYPH: boolean;
+    POINT_SIGN_GLYPH_SCALE: number;
     DIGNITIES_RULERSHIP: string;
     DIGNITIES_DETRIMENT: string;
     DIGNITIES_EXALTATION: string;

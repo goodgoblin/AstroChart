@@ -89,8 +89,14 @@
 				}
 			};
 												      
-        	window.onload = function () {            	     
-				var radix = new astrochart.Chart('paper', 800, 800).radix(data);
+        	window.onload = function () {
+        		// Optional: Enable sign glyphs next to planet degrees for easier identification
+        		var settings = {
+        			SHOW_POINT_SIGN_GLYPH: true,  // Show sign glyph (♈︎, ♉︎, ♊︎, etc.) next to degree
+        			POINT_SIGN_GLYPH_SCALE: 0.45  // Scale the sign glyphs to 45% size (default: 0.45)
+        		};
+
+				var radix = new astrochart.Chart('paper', 800, 800, settings).radix(data);
 								
 				// Aspect calculation with angles
 				radix.addPointsOfInterest({

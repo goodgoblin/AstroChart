@@ -209,6 +209,27 @@ class Radix {
       pointDescriptions.forEach(function (dsc) {
         wrapper.appendChild(this.paper.text(dsc.text, dsc.x, dsc.y, this.settings.POINTS_TEXT_SIZE, this.settings.SIGNS_COLOR))
       }, this)
+
+      // Add sign glyph symbol if enabled
+      if (this.settings.SHOW_POINT_SIGN_GLYPH) {
+        const signNumber = zodiac.getSign(this.data.planets[point.name][0])
+        const signName = this.settings.SYMBOL_SIGNS[signNumber - 1]
+        // Position the sign glyph with extra spacing to avoid collisions
+        const RATION = 1.4
+        const SPACING_OFFSET = 0.55 // Extra spacing to prevent collisions with planet glyphs (especially Saturn)
+        const glyphX = point.x + (this.settings.COLLISION_RADIUS / RATION * this.settings.SYMBOL_SCALE)
+        const glyphY = point.y - (this.settings.COLLISION_RADIUS * this.settings.SYMBOL_SCALE) +
+                       (this.settings.COLLISION_RADIUS / RATION * this.settings.SYMBOL_SCALE * (textsToShow.length + SPACING_OFFSET))
+
+        // Create a wrapper group for the scaled sign glyph
+        const glyphWrapper = document.createElementNS(this.paper.root.namespaceURI, 'g')
+        const scale = this.settings.POINT_SIGN_GLYPH_SCALE
+        glyphWrapper.setAttribute('transform', `translate(${glyphX}, ${glyphY}) scale(${scale}) translate(${-glyphX}, ${-glyphY})`)
+
+        const signSymbol = this.paper.getSymbol(signName, glyphX, glyphY)
+        glyphWrapper.appendChild(signSymbol)
+        wrapper.appendChild(glyphWrapper)
+      }
     }, this)
   }
 

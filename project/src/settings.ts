@@ -103,6 +103,8 @@ export interface Settings {
   COLLISION_RADIUS: number
   ASPECTS: Aspect
   SHOW_DIGNITIES_TEXT: boolean
+  SHOW_POINT_SIGN_GLYPH: boolean
+  POINT_SIGN_GLYPH_SCALE: number
   DIGNITIES_RULERSHIP: string
   DIGNITIES_DETRIMENT: string
   DIGNITIES_EXALTATION: string
@@ -291,6 +293,8 @@ const settings: Settings = {
 
   // Dignities
   SHOW_DIGNITIES_TEXT: true,
+  SHOW_POINT_SIGN_GLYPH: false, // Show sign glyph next to planet degree
+  POINT_SIGN_GLYPH_SCALE: 0.45, // Scale factor for point sign glyphs (relative to SYMBOL_SCALE)
   DIGNITIES_RULERSHIP: 'r',
   DIGNITIES_DETRIMENT: 'd',
   DIGNITIES_EXALTATION: 'e',
