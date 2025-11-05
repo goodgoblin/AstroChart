@@ -17,9 +17,16 @@ import type { Settings } from './settings'
 
 export type Points = Record<string, number[]>
 export interface LocatedPoint { name: string; x: number; y: number; r: number; angle: number; pointer?: number; index?: number }
+export interface Angles {
+  As?: number
+  Ic?: number
+  Ds?: number
+  Mc?: number
+}
 export interface AstroData {
   planets: Points
   cusps: number[]
+  angles?: Angles
 }
 
 /**
@@ -223,44 +230,53 @@ class Radix {
     let startPosition
     let endPosition
 
-    [AS, IC, DC, MC].forEach(function (i) {
-      let textPosition
-      // overlap
-      startPosition = getPointPosition(this.cx, this.cy, this.radius, this.data.cusps[i] + this.shift, this.settings)
-      endPosition = getPointPosition(this.cx, this.cy, axisRadius, this.data.cusps[i] + this.shift, this.settings)
-      overlapLine = this.paper.line(startPosition.x, startPosition.y, endPosition.x, endPosition.y)
-      overlapLine.setAttribute('stroke', this.settings.LINE_COLOR)
-      overlapLine.setAttribute('stroke-width', (this.settings.SYMBOL_AXIS_STROKE * this.settings.SYMBOL_SCALE))
-      wrapper.appendChild(overlapLine)
+    // Determine axis positions: use angles if provided, otherwise fall back to cusps
+    const axisPositions = {
+      AS: this.data.angles?.As ?? this.data.cusps[AS],
+      IC: this.data.angles?.Ic ?? this.data.cusps[IC],
+      DC: this.data.angles?.Ds ?? this.data.cusps[DC],
+      MC: this.data.angles?.Mc ?? this.data.cusps[MC]
+    }
 
-      // As
-      if (i === AS) {
-        // Text
-        textPosition = getPointPosition(this.cx, this.cy, axisRadius + (20 * this.settings.SYMBOL_SCALE), this.data.cusps[i] + this.shift, this.settings)
-        wrapper.appendChild(this.paper.getSymbol(this.settings.SYMBOL_AS, textPosition.x, textPosition.y))
-      }
+    // Draw Ascendant
+    startPosition = getPointPosition(this.cx, this.cy, this.radius, axisPositions.AS + this.shift, this.settings)
+    endPosition = getPointPosition(this.cx, this.cy, axisRadius, axisPositions.AS + this.shift, this.settings)
+    overlapLine = this.paper.line(startPosition.x, startPosition.y, endPosition.x, endPosition.y)
+    overlapLine.setAttribute('stroke', this.settings.LINE_COLOR)
+    overlapLine.setAttribute('stroke-width', (this.settings.SYMBOL_AXIS_STROKE * this.settings.SYMBOL_SCALE).toString())
+    wrapper.appendChild(overlapLine)
+    let textPosition = getPointPosition(this.cx, this.cy, axisRadius + (20 * this.settings.SYMBOL_SCALE), axisPositions.AS + this.shift, this.settings)
+    wrapper.appendChild(this.paper.getSymbol(this.settings.SYMBOL_AS, textPosition.x, textPosition.y))
 
-      // Ds
-      if (i === DC) {
-        // Text
-        textPosition = getPointPosition(this.cx, this.cy, axisRadius + (2 * this.settings.SYMBOL_SCALE), this.data.cusps[i] + this.shift, this.settings)
-        wrapper.appendChild(this.paper.getSymbol(this.settings.SYMBOL_DS, textPosition.x, textPosition.y))
-      }
+    // Draw Descendant
+    startPosition = getPointPosition(this.cx, this.cy, this.radius, axisPositions.DC + this.shift, this.settings)
+    endPosition = getPointPosition(this.cx, this.cy, axisRadius, axisPositions.DC + this.shift, this.settings)
+    overlapLine = this.paper.line(startPosition.x, startPosition.y, endPosition.x, endPosition.y)
+    overlapLine.setAttribute('stroke', this.settings.LINE_COLOR)
+    overlapLine.setAttribute('stroke-width', (this.settings.SYMBOL_AXIS_STROKE * this.settings.SYMBOL_SCALE).toString())
+    wrapper.appendChild(overlapLine)
+    textPosition = getPointPosition(this.cx, this.cy, axisRadius + (2 * this.settings.SYMBOL_SCALE), axisPositions.DC + this.shift, this.settings)
+    wrapper.appendChild(this.paper.getSymbol(this.settings.SYMBOL_DS, textPosition.x, textPosition.y))
 
-      // Ic
-      if (i === IC) {
-        // Text
-        textPosition = getPointPosition(this.cx, this.cy, axisRadius + (10 * this.settings.SYMBOL_SCALE), this.data.cusps[i] - 2 + this.shift, this.settings)
-        wrapper.appendChild(this.paper.getSymbol(this.settings.SYMBOL_IC, textPosition.x, textPosition.y))
-      }
+    // Draw IC
+    startPosition = getPointPosition(this.cx, this.cy, this.radius, axisPositions.IC + this.shift, this.settings)
+    endPosition = getPointPosition(this.cx, this.cy, axisRadius, axisPositions.IC + this.shift, this.settings)
+    overlapLine = this.paper.line(startPosition.x, startPosition.y, endPosition.x, endPosition.y)
+    overlapLine.setAttribute('stroke', this.settings.LINE_COLOR)
+    overlapLine.setAttribute('stroke-width', (this.settings.SYMBOL_AXIS_STROKE * this.settings.SYMBOL_SCALE).toString())
+    wrapper.appendChild(overlapLine)
+    textPosition = getPointPosition(this.cx, this.cy, axisRadius + (10 * this.settings.SYMBOL_SCALE), axisPositions.IC - 2 + this.shift, this.settings)
+    wrapper.appendChild(this.paper.getSymbol(this.settings.SYMBOL_IC, textPosition.x, textPosition.y))
 
-      // Mc
-      if (i === MC) {
-        // Text
-        textPosition = getPointPosition(this.cx, this.cy, axisRadius + (10 * this.settings.SYMBOL_SCALE), this.data.cusps[i] + 2 + this.shift, this.settings)
-        wrapper.appendChild(this.paper.getSymbol(this.settings.SYMBOL_MC, textPosition.x, textPosition.y))
-      }
-    }, this)
+    // Draw MC
+    startPosition = getPointPosition(this.cx, this.cy, this.radius, axisPositions.MC + this.shift, this.settings)
+    endPosition = getPointPosition(this.cx, this.cy, axisRadius, axisPositions.MC + this.shift, this.settings)
+    overlapLine = this.paper.line(startPosition.x, startPosition.y, endPosition.x, endPosition.y)
+    overlapLine.setAttribute('stroke', this.settings.LINE_COLOR)
+    overlapLine.setAttribute('stroke-width', (this.settings.SYMBOL_AXIS_STROKE * this.settings.SYMBOL_SCALE).toString())
+    wrapper.appendChild(overlapLine)
+    textPosition = getPointPosition(this.cx, this.cy, axisRadius + (10 * this.settings.SYMBOL_SCALE), axisPositions.MC + 2 + this.shift, this.settings)
+    wrapper.appendChild(this.paper.getSymbol(this.settings.SYMBOL_MC, textPosition.x, textPosition.y))
   }
 
   /**

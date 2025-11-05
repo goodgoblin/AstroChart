@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Radix with Floating Angles (Equal Houses)</title>  
+        <style>
+        	#paper{
+        		background:#999;
+        	}
+        	body {
+        		font-family: Arial, sans-serif;
+        		padding: 20px;
+        	}
+        	.info {
+        		background: #f0f0f0;
+        		padding: 15px;
+        		margin-bottom: 20px;
+        		border-radius: 5px;
+        	}
+        	.info h2 {
+        		margin-top: 0;
+        	}
+        	.info code {
+        		background: #fff;
+        		padding: 2px 5px;
+        		border-radius: 3px;
+        	}
+        </style>                   
+    </head>
+    <body>
+    	<div class="info">
+    		<h2>Equal Houses with Floating MC/IC</h2>
+    		<p>This example demonstrates the new <code>angles</code> feature in AstroChart.</p>
+    		<p><strong>House System:</strong> Equal Houses (30° each from Ascendant)</p>
+    		<ul>
+    			<li><strong>Ascendant:</strong> 208.12° (28° Libra)</li>
+    			<li><strong>MC:</strong> 123.50° (3° Leo) - <em>Floats 5° past 10th house cusp</em></li>
+    			<li><strong>10th House Cusp:</strong> 118.12° (28° Cancer)</li>
+    			<li><strong>IC:</strong> 303.50° (3° Aquarius) - <em>Opposite MC</em></li>
+    		</ul>
+    		<p>Notice how the MC and IC axis lines appear at their true astronomical positions, 
+    		   while the house cusps show the Equal house divisions.</p>
+    	</div>
+    	    
+        <div id="paper"></div>
+                                      
+        <script src="../../../dist/astrochart.js"></script>
+        <script type="text/javascript"> 
+        
+        	// Example data with Equal Houses
+        	// In Equal houses, each house is exactly 30° from the Ascendant
+        	// But MC "floats" at its true astronomical position
+        	var data = {
+				"planets": {
+					"Sun": [281], 
+					"Moon": [268], 
+					"Mercury": [312], 
+					"Venus": [330], 
+					"Mars": [210], 
+					"Jupiter": [192], 
+					"Saturn": [201, -0.2], 
+					"Uranus": [318], 
+					"Neptune": [110, 0.2], 
+					"Pluto": [63],
+					"NNode": [2],
+					"SNode": [182]
+				},
+				// Equal house cusps: each 30° from Ascendant (208.12°)
+				"cusps": [
+					208.12,  // 1st - Ascendant
+					238.12,  // 2nd
+					268.12,  // 3rd
+					298.12,  // 4th - IC position in Equal houses
+					328.12,  // 5th
+					358.12,  // 6th
+					28.12,   // 7th - Descendant
+					58.12,   // 8th
+					88.12,   // 9th
+					118.12,  // 10th - MC position in Equal houses
+					148.12,  // 11th
+					178.12   // 12th
+				],
+				// NEW: Separate angles for true astronomical positions
+				"angles": {
+					"As": 208.12,  // Ascendant (same as 1st cusp)
+					"Mc": 123.50,  // MC at true position (5° past 10th cusp!)
+					"Ds": 28.12,   // Descendant (same as 7th cusp)
+					"Ic": 303.50   // IC opposite MC
+				}
+			};
+												      
+        	window.onload = function () {            	     
+				var radix = new astrochart.Chart('paper', 800, 800).radix(data);
+								
+				// Aspect calculation with angles
+				radix.addPointsOfInterest({
+					"As": [data.angles.As],
+					"Ic": [data.angles.Ic],
+					"Ds": [data.angles.Ds],
+					"Mc": [data.angles.Mc]
+				});				
+				radix.aspects();
+				
+				console.log('Chart rendered with floating MC/IC!');
+				console.log('MC is at:', data.angles.Mc, '(true position)');
+				console.log('10th house cusp is at:', data.cusps[9], '(Equal house division)');
+				console.log('Difference:', Math.abs(data.angles.Mc - data.cusps[9]).toFixed(2), 'degrees');
+			};
+		</script>		    
+    </body>
+</html>
+

@@ -12,9 +12,16 @@ export interface LocatedPoint {
     pointer?: number;
     index?: number;
 }
+export interface Angles {
+    As?: number;
+    Ic?: number;
+    Ds?: number;
+    Mc?: number;
+}
 export interface AstroData {
     planets: Points;
     cusps: number[];
+    angles?: Angles;
 }
 /**
    * Radix charts.
