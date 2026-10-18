@@ -102,6 +102,12 @@ export interface Settings {
   ADD_CLICK_AREA: boolean
   COLLISION_RADIUS: number
   ASPECTS: Aspect
+  ASPECT_STROKE_MIN: number
+  ASPECT_STROKE_MAX: number
+  ASPECT_DASH_BELOW: number
+  ASPECT_HOVER: boolean
+  ASPECT_CONJUNCTION_IMPACT: boolean
+  ASPECT_CONJUNCTION_COLOR: string
   SHOW_DIGNITIES_TEXT: boolean
   SHOW_POINT_SIGN_GLYPH: boolean
   POINT_SIGN_GLYPH_SCALE: number
@@ -290,6 +296,16 @@ const settings: Settings = {
     trine: { degree: 120, orbit: 8, color: '#27AE60' },
     opposition: { degree: 180, orbit: 10, color: '#27AE60' }
   },
+  // Aspect line width by orb: exact -> MAX, at inclusion limit -> MIN (scaled by SYMBOL_SCALE)
+  ASPECT_STROKE_MIN: 0.5,
+  ASPECT_STROKE_MAX: 3,
+  // Aspects in the wide third of their orb draw dashed (tightness 1 = exact, 0 = at limit)
+  ASPECT_DASH_BELOW: 0.34,
+  // Hover/tap an aspect: it glows, others fade, a label shows the pair and orb
+  ASPECT_HOVER: true,
+  // Conjunctions (no line to draw) show a core + ripples where the bodies meet
+  ASPECT_CONJUNCTION_IMPACT: true,
+  ASPECT_CONJUNCTION_COLOR: '#E8A33D',
 
   // Dignities
   SHOW_DIGNITIES_TEXT: true,

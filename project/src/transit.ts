@@ -1,5 +1,5 @@
 import Zodiac from './zodiac'
-import AspectCalculator from './aspect'
+import AspectCalculator, { styleAspectLine, createAspectHover, appendConjunctionImpact } from './aspect'
 import type { FormedAspect } from './aspect'
 import Animator from './animation/animator'
 import { validate, getEmptyWrapper, getPointPosition, getRulerPositions, getDescriptionPosition, assemble, radiansToDegree } from './utils'
@@ -236,6 +236,7 @@ class Transit {
 
     const universe = this.universe
     const wrapper = getEmptyWrapper(universe, this.paper.root.id + '-' + this.settings.ID_ASPECTS, this.paper._paperElementId)
+    const hover = createAspectHover(wrapper, this.cx, this.cy, this.settings)
 
     for (let i = 0, ln = aspectsList.length; i < ln; i++) {
       const startPoint = getPointPosition(this.cx, this.cy, this.radius / this.settings.INDOOR_CIRCLE_RADIUS_RATIO, aspectsList[i].toPoint.position + this.shift, this.settings)
@@ -243,15 +244,17 @@ class Transit {
 
       const line = this.paper.line(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
       line.setAttribute('stroke', this.settings.STROKE_ONLY ? this.settings.LINE_COLOR : aspectsList[i].aspect.color)
-      line.setAttribute('stroke-width', (this.settings.CUSPS_STROKE * this.settings.SYMBOL_SCALE).toString())
+      styleAspectLine(line, aspectsList[i], this.settings)
 
       line.setAttribute('data-name', aspectsList[i].aspect.name)
       line.setAttribute('data-degree', aspectsList[i].aspect.degree.toString())
       line.setAttribute('data-point', aspectsList[i].point.name)
       line.setAttribute('data-toPoint', aspectsList[i].toPoint.name)
       line.setAttribute('data-precision', aspectsList[i].precision.toString())
+      const impact = appendConjunctionImpact(wrapper, this.cx, this.cy, this.radius / this.settings.INDOOR_CIRCLE_RADIUS_RATIO, this.shift, aspectsList[i], this.settings)
 
       wrapper.appendChild(line)
+      hover?.add(line, aspectsList[i], impact)
     }
 
     // this

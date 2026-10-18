@@ -104,6 +104,12 @@ export interface Settings {
     ADD_CLICK_AREA: boolean;
     COLLISION_RADIUS: number;
     ASPECTS: Aspect;
+    ASPECT_STROKE_MIN: number;
+    ASPECT_STROKE_MAX: number;
+    ASPECT_DASH_BELOW: number;
+    ASPECT_HOVER: boolean;
+    ASPECT_CONJUNCTION_IMPACT: boolean;
+    ASPECT_CONJUNCTION_COLOR: string;
     SHOW_DIGNITIES_TEXT: boolean;
     SHOW_POINT_SIGN_GLYPH: boolean;
     POINT_SIGN_GLYPH_SCALE: number;
